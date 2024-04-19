@@ -1,21 +1,18 @@
-package com.cooba.service;
+package com.cooba.component.impl;
 
-import lombok.RequiredArgsConstructor;
+import com.cooba.component.Server;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
-@Service
-@RequiredArgsConstructor
-public class RegistryService {
-    private final RedisTemplate<String, String> redisTemplate;
+@Component
+public class NettyServer implements Server {
     private String hostAddress;
     @Value("${server.port}")
-    private String port;
+    private Integer port;
 
     @PostConstruct
     public void init() {
@@ -26,9 +23,13 @@ public class RegistryService {
             throw new RuntimeException(e);
         }
     }
+    @Override
+    public String getHostAddress() {
+        return hostAddress;
+    }
 
-    public void registryUserConnectInfo(String userId) {
-        String serverInfo = hostAddress + ":" + port;
-        redisTemplate.opsForHash().put("connection", userId, serverInfo);
+    @Override
+    public int getPort() {
+        return port;
     }
 }

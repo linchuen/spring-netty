@@ -27,7 +27,7 @@ public class NettyInitRunner implements ApplicationRunner {
     private final ValidationHandler validationHandler;
     private final WebSocketHandler webSocketHandler;
     @Value("${server.port}")
-    private String port;
+    private Integer port;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -37,23 +37,27 @@ public class NettyInitRunner implements ApplicationRunner {
                     .channel(NioServerSocketChannel.class)
                     .option(ChannelOption.SO_BACKLOG, 128)
                     .childOption(ChannelOption.SO_KEEPALIVE, true)
-                    .childHandler(new ChannelInitializer<SocketChannel>() {
-                        @Override
-                        protected void initChannel(SocketChannel socketChannel) throws Exception {
-                            socketChannel.pipeline()
-                                    .addLast(new HttpServerCodec())
-                                    .addLast(new HttpObjectAggregator(65536))
-                                    .addLast(validationHandler)
-                                    .addLast(new WebSocketServerCompressionHandler())
-                                    .addLast(new WebSocketServerProtocolHandler("/ws", null, true))
-                                    .addLast(webSocketHandler);
-                        }
-                    });
-            ChannelFuture channelFuture = bootstrap.bind(Integer.parseInt(port)).sync();
+                    .childHandler(channelChannelInitializer());
+            ChannelFuture channelFuture = bootstrap.bind(port).sync();
             channelFuture.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();
             workerGroup.shutdownGracefully();
         }
+    }
+
+    private ChannelInitializer<SocketChannel> channelChannelInitializer() {
+        return new ChannelInitializer<>() {
+            @Override
+            protected void initChannel(SocketChannel socketChannel) {
+                socketChannel.pipeline()
+                        .addLast(new HttpServerCodec())
+                        .addLast(new HttpObjectAggregator(65536))
+                        .addLast(validationHandler)
+                        .addLast(new WebSocketServerCompressionHandler())
+                        .addLast(new WebSocketServerProtocolHandler("/ws", null, true))
+                        .addLast(webSocketHandler);
+            }
+        };
     }
 }

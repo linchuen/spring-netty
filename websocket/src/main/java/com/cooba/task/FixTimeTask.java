@@ -1,6 +1,6 @@
 package com.cooba.task;
 
-import com.cooba.service.ChannelService;
+import com.cooba.component.SocketManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -10,11 +10,10 @@ import org.springframework.stereotype.Component;
 @Component
 @RequiredArgsConstructor
 public class FixTimeTask {
-    private final ChannelService channelService;
+    private final SocketManager socketManager;
 
     @Scheduled(initialDelay = 5000, fixedRate = 3000)
     public void sendMessage() {
-        log.info("start send message to all users");
-        channelService.sendMessageToAll("Hello");
+        socketManager.sendMessageToAll("Hello");
     }
 }

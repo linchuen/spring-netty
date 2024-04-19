@@ -21,13 +21,15 @@ public class RedisMessageQueue implements MessageQueue, MessageListener {
     private final RedisMessageListenerContainer redisMessageListenerContainer;
 
     @PostConstruct
-    public void init(){
+    public void init() {
         String topic = Topic.server(server.getHostAddress(), server.getPort());
         subscribe(topic);
     }
+
     @Override
     public void subscribe(String topic) {
         redisMessageListenerContainer.addMessageListener(this, new PatternTopic(topic));
+        log.info("Subscribed to topic: {} ", topic);
     }
 
     @Override
@@ -39,7 +41,7 @@ public class RedisMessageQueue implements MessageQueue, MessageListener {
     public void onMessage(Message message, byte[] pattern) {
         String channel = new String(message.getChannel());
         String body = new String(message.getBody());
-        log.info(" channel {} body {} pattern {} ", channel, body, new String(pattern));
+        log.info("Channel {} body {} pattern {} ", channel, body, new String(pattern));
 
         handleMessage(body);
     }

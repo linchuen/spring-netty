@@ -29,9 +29,9 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
         if (evt instanceof WebSocketServerProtocolHandler.HandshakeComplete) {
             WebSocketServerProtocolHandler.HandshakeComplete handshakeCompletedEvent = (WebSocketServerProtocolHandler.HandshakeComplete) evt;
             HttpHeaders headers = handshakeCompletedEvent.requestHeaders();
-            String playerId = headers.get("playerId");
+            String userId = headers.get("userId");
 
-            cacheService.cacheChannel(playerId, ctx.channel());
+            cacheService.cacheChannel(userId, ctx.channel());
         }
     }
 }

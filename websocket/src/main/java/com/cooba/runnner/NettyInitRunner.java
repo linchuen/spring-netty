@@ -14,6 +14,7 @@ import io.netty.handler.codec.http.HttpServerCodec;
 import io.netty.handler.codec.http.websocketx.WebSocketServerProtocolHandler;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketServerCompressionHandler;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Component;
@@ -25,6 +26,8 @@ public class NettyInitRunner implements ApplicationRunner {
     private final EventLoopGroup workerGroup;
     private final ValidationHandler validationHandler;
     private final WebSocketHandler webSocketHandler;
+    @Value("${server.port}")
+    private String port;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -46,7 +49,7 @@ public class NettyInitRunner implements ApplicationRunner {
                                     .addLast(webSocketHandler);
                         }
                     });
-            ChannelFuture channelFuture = bootstrap.bind(8080).sync();
+            ChannelFuture channelFuture = bootstrap.bind(Integer.parseInt(port)).sync();
             channelFuture.channel().closeFuture().sync();
         } finally {
             bossGroup.shutdownGracefully();

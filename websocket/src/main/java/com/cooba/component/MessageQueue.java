@@ -2,7 +2,7 @@ package com.cooba.component;
 
 public interface MessageQueue {
 
-    void subscribe();
+    void subscribe(String topic);
 
-    void handleMessage();
+    void handleMessage(String message);
 }

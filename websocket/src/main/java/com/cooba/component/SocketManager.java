@@ -2,6 +2,9 @@ package com.cooba.component;
 
 import io.netty.channel.ChannelHandlerContext;
 
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
+
 public interface SocketManager {
     void cacheSocket(String id, ChannelHandlerContext context);
 
@@ -9,5 +12,7 @@ public interface SocketManager {
 
     void removeSocket(String id);
 
-    void sendMessageToAll(String message);
+    void allExecute(BiConsumer<String, ChannelHandlerContext> consumer);
+
+    void execute(String id, Consumer<ChannelHandlerContext> consumer);
 }

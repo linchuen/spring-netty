@@ -7,15 +7,14 @@ import org.springframework.core.task.TaskExecutor;
 import org.springframework.scheduling.annotation.EnableScheduling;
 import org.springframework.scheduling.concurrent.ThreadPoolTaskExecutor;
 
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+
 @EnableScheduling
 @Configuration
 public class TaskConfig {
     @Bean
-    public TaskExecutor taskExecutor() {
-        ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
-        taskExecutor.setCorePoolSize(10);
-        taskExecutor.setMaxPoolSize(50);
-        taskExecutor.setThreadNamePrefix("task");
-        return taskExecutor;
+    public ScheduledExecutorService taskScheduler() {
+        return Executors.newScheduledThreadPool(10);
     }
 }

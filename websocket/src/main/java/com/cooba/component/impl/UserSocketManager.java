@@ -2,6 +2,7 @@ package com.cooba.component.impl;
 
 import com.cooba.component.Server;
 import com.cooba.component.SocketManager;
+import com.cooba.constant.RedisKey;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
@@ -15,6 +16,8 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
+import java.util.function.BiConsumer;
+import java.util.function.Consumer;
 
 @Slf4j
 @Component
@@ -35,7 +38,7 @@ public class UserSocketManager implements SocketManager {
     @Override
     public void registerSocketInfo(String id, String ipAddress, int port) {
         String serverInfo = ipAddress + ":" + port;
-        redisTemplate.opsForHash().put("connection", id, serverInfo);
+        redisTemplate.opsForHash().put(RedisKey.CONNECTION, id, serverInfo);
     }
 
     @Override
@@ -44,9 +47,15 @@ public class UserSocketManager implements SocketManager {
     }
 
     @Override
-    public void sendMessageToAll(String message) {
-        channelMap.forEach((id, context) -> {
-            context.channel().writeAndFlush(new TextWebSocketFrame(id + message));
-        });
+    public void allExecute(BiConsumer<String, ChannelHandlerContext> consumer) {
+        channelMap.forEach(consumer);
+    }
+
+    @Override
+    public void execute(String id, Consumer<ChannelHandlerContext> consumer) {
+        ChannelHandlerContext context = channelMap.get(id);
+        if (id == null) return;
+
+        consumer.accept(context);
     }
 }

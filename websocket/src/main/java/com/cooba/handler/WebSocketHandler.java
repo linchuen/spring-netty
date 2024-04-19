@@ -1,6 +1,6 @@
 package com.cooba.handler;
 
-import com.cooba.service.CacheService;
+import com.cooba.service.ChannelService;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -16,7 +16,7 @@ import java.util.Locale;
 @Component
 @RequiredArgsConstructor
 public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketFrame> {
-    private final CacheService cacheService;
+    private final ChannelService cacheService;
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, TextWebSocketFrame frame) {
@@ -31,7 +31,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             HttpHeaders headers = handshakeCompletedEvent.requestHeaders();
             String userId = headers.get("userId");
 
-            cacheService.cacheChannel(userId, ctx.channel());
+            cacheService.cacheChannel(userId, ctx);
         }
     }
 }

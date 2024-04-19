@@ -13,7 +13,7 @@ public class CacheService {
     private final Map<String, Channel> channelMap = new ConcurrentHashMap<>();
 
     public void cacheChannel(String id, Channel channel) {
-        log.info("cache channel playerId: {} id: {}", id, channel.id());
+        log.info("cache channel playerId: {} channel id: {}", id, channel.id());
         channelMap.put(id, channel);
     }
 }

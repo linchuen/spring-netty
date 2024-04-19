@@ -17,6 +17,7 @@
     <modules>
         <module>websocket</module>
         <module>rest</module>
+        <module>common</module>
     </modules>
 
     <properties>

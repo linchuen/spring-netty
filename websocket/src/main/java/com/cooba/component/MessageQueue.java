@@ -4,5 +4,5 @@ public interface MessageQueue {
 
     void subscribe(String topic);
 
-    void handleMessage(String message);
+    void handleMessage(String json);
 }

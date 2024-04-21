@@ -1,7 +1,6 @@
 package com.cooba.task;
 
 import com.cooba.component.SocketManager;
-import io.netty.channel.group.ChannelGroup;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -16,9 +15,9 @@ public class FixTimeTask {
 
     @Scheduled(initialDelay = 5000, fixedRate = 3000)
     public void sendMessage() {
-        socketManager.allExecute((id, context) -> {
+        socketManager.allExecute((id, channel) -> {
             String message = "Hello";
-            context.channel().writeAndFlush(new TextWebSocketFrame(id + message));
+            channel.writeAndFlush(new TextWebSocketFrame(id + message));
         });
     }
 }

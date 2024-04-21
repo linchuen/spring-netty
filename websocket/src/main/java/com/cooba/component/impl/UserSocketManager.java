@@ -4,17 +4,15 @@ import com.cooba.component.Server;
 import com.cooba.component.SocketManager;
 import com.cooba.constant.RedisKey;
 import com.cooba.constant.Topic;
-import io.netty.channel.ChannelHandlerContext;
-import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
+import io.netty.channel.*;
+import io.netty.channel.group.ChannelGroup;
+import io.netty.channel.group.DefaultChannelGroup;
+import io.netty.util.concurrent.GlobalEventExecutor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
-import javax.annotation.PostConstruct;
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.BiConsumer;
@@ -24,16 +22,19 @@ import java.util.function.Consumer;
 @Component
 @RequiredArgsConstructor
 public class UserSocketManager implements SocketManager {
-    private final Map<String, ChannelHandlerContext> channelMap = new ConcurrentHashMap<>();
+    private final Map<String, Channel> idChannelMap = new ConcurrentHashMap<>();
     private final RedisTemplate<String, String> redisTemplate;
     private final Server server;
 
     @Override
-    public void cacheSocket(String id, ChannelHandlerContext context) {
-        log.info("cache socket id: {} channel id: {}", id, context.channel().id());
-        channelMap.put(id, context);
+    public void cacheSocket(String id, Channel channel) {
+        boolean added = idChannelMap.putIfAbsent(id, channel) == null;
+        if (added) {
+            log.info("cache socket id: {} channel id: {}", id, channel.id());
+            channel.closeFuture().addListener((ChannelFutureListener) future -> removeSocket(id));
 
-        registerSocketInfo(id, server.getHostAddress(), server.getPort());
+            registerSocketInfo(id, server.getHostAddress(), server.getPort());
+        }
     }
 
     @Override
@@ -44,19 +45,19 @@ public class UserSocketManager implements SocketManager {
 
     @Override
     public void removeSocket(String id) {
-        channelMap.remove(id);
+        idChannelMap.remove(id);
     }
 
     @Override
-    public void allExecute(BiConsumer<String, ChannelHandlerContext> consumer) {
-        channelMap.forEach(consumer);
+    public void allExecute(BiConsumer<String, Channel> consumer) {
+        idChannelMap.forEach(consumer);
     }
 
     @Override
-    public void execute(String id, Consumer<ChannelHandlerContext> consumer) {
-        ChannelHandlerContext context = channelMap.get(id);
+    public void execute(String id, Consumer<Channel> consumer) {
+        Channel channel = idChannelMap.get(id);
         if (id == null) return;
 
-        consumer.accept(context);
+        consumer.accept(channel);
     }
 }

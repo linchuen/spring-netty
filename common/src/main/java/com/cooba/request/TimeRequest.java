@@ -1,15 +1,15 @@
-package com.cooba.condition;
+package com.cooba.request;
 
 import lombok.Data;
 
 import java.time.LocalDateTime;
 
 @Data
-public class TimeCondition {
+public class TimeRequest {
     private LocalDateTime startTime;
     private LocalDateTime endTime;
 
-    public TimeCondition(LocalDateTime startTime, LocalDateTime endTime) {
+    public TimeRequest(LocalDateTime startTime, LocalDateTime endTime) {
         this.startTime = startTime;
         this.endTime = endTime;
 

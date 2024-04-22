@@ -1,9 +1,9 @@
 package com.cooba.component.socketmanger;
 
 import com.cooba.component.server.Server;
-import com.cooba.component.socketmanger.SocketManager;
-import com.cooba.constant.RedisKey;
+
 import com.cooba.constant.Topic;
+import com.cooba.enums.RedisKey;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFutureListener;
 import lombok.RequiredArgsConstructor;
@@ -38,7 +38,7 @@ public class UserSocketManager implements SocketManager {
     @Override
     public void registerSocketInfo(String id, String ipAddress, int port) {
         String topic = Topic.server(server.getHostAddress(), server.getPort());
-        redisTemplate.opsForHash().put(RedisKey.CONNECTION, id, topic);
+        redisTemplate.opsForHash().put(RedisKey.CONNECTION.name(), id, topic);
     }
 
     @Override

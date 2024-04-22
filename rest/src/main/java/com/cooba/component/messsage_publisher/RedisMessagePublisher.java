@@ -1,10 +1,10 @@
 package com.cooba.component.messsage_publisher;
 
-import com.cooba.component.messsage_publisher.MessagePublisher;
-import com.cooba.constant.RedisKey;
+
 import com.cooba.constant.Topic;
 import com.cooba.dto.MessageDto;
 import com.cooba.enums.MessageTypeEnum;
+import com.cooba.enums.RedisKey;
 import com.cooba.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +18,7 @@ public class RedisMessagePublisher implements MessagePublisher {
 
     @Override
     public void sendMessage(String id, MessageTypeEnum type, String message) {
-        String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION, id);
+        String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION.name(), id);
         if (topic == null) {
             throw new RuntimeException();
         }

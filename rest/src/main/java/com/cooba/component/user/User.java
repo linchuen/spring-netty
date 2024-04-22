@@ -11,5 +11,5 @@ public interface User {
 
     void speak(long userId, String message);
 
-    void getCurrentRoom(long userId);
+    Long getCurrentRoom(long userId);
 }

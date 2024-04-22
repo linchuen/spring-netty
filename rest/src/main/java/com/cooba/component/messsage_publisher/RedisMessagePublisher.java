@@ -2,7 +2,7 @@ package com.cooba.component.messsage_publisher;
 
 
 import com.cooba.constant.Topic;
-import com.cooba.dto.MessageDto;
+import com.cooba.dto.MqMessage;
 import com.cooba.enums.MessageTypeEnum;
 import com.cooba.enums.RedisKey;
 import com.cooba.util.JsonUtil;
@@ -23,22 +23,22 @@ public class RedisMessagePublisher implements MessagePublisher {
             throw new RuntimeException();
         }
 
-        MessageDto messageDto = new MessageDto();
-        messageDto.setId(id);
-        messageDto.setType(type);
-        messageDto.setMessage(message);
+        MqMessage mqMessage = new MqMessage();
+        mqMessage.setId(id);
+        mqMessage.setType(type);
+        mqMessage.setMessage(message);
 
-        String json = jsonUtil.toJson(messageDto);
+        String json = jsonUtil.toJson(mqMessage);
         redisTemplate.convertAndSend(topic, json);
     }
 
     @Override
     public void sendMessageToAll(MessageTypeEnum type, String message) {
-        MessageDto messageDto = new MessageDto();
-        messageDto.setType(type);
-        messageDto.setMessage(message);
+        MqMessage mqMessage = new MqMessage();
+        mqMessage.setType(type);
+        mqMessage.setMessage(message);
 
-        String json = jsonUtil.toJson(messageDto);
+        String json = jsonUtil.toJson(mqMessage);
         redisTemplate.convertAndSend(Topic.ALL, json);
     }
 }

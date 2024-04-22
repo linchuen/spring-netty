@@ -1,10 +1,9 @@
 package com.cooba.component.mq;
 
-import com.cooba.component.mq.MessageQueue;
 import com.cooba.component.server.Server;
 import com.cooba.component.socketmanger.SocketManager;
 import com.cooba.constant.Topic;
-import com.cooba.dto.MessageDto;
+import com.cooba.dto.MqMessage;
 import com.cooba.util.JsonUtil;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +39,7 @@ public class RedisMessageQueue implements MessageQueue, MessageListener {
 
     @Override
     public void handleMessage(String json) {
-        MessageDto message = jsonUtil.fromJson(json, MessageDto.class);
+        MqMessage message = jsonUtil.fromJson(json, MqMessage.class);
         String id = message.getId();
         socketManager.execute(id, context ->
                 context.writeAndFlush(new TextWebSocketFrame(json))

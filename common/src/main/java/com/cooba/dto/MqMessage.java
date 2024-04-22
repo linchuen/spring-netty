@@ -4,7 +4,7 @@ import com.cooba.enums.MessageTypeEnum;
 import lombok.Data;
 
 @Data
-public class MessageDto {
+public class MqMessage {
     private String id;
     private MessageTypeEnum type;
     private String message;

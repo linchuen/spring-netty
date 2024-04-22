@@ -71,7 +71,7 @@ public class CreateTableSqlGenerator {
                     .isPrimaryKey(fieldName.equals("`id`"))
                     .build();
             return createColumn(column);
-        }).collect(Collectors.joining(",\n"));
+        }).collect(Collectors.joining(",\n")) + ",";
     }
 
     @Data

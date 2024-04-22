@@ -7,4 +7,20 @@
         from user
         where id = #{userId}
     </select>
+
+    <insert id="insert" parameterType="com.cooba.entity.UserEntity">
+        INSERT INTO user
+        (id,name)
+        VALUES
+        (
+            #{id},
+            #{name}
+        )
+    </insert>
+
+    <delete id="delete">
+        DELETE FROM user
+        WHERE
+        id = #{userId}
+    </delete>
 </mapper>

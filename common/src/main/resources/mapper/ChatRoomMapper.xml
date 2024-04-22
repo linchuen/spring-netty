@@ -3,38 +3,86 @@
 <mapper namespace="com.cooba.mapper.ChatRoomMapper">
 
     <insert id="insert">
-
+        INSERT INTO chat_room
+        (name)
+        VALUES
+        (
+        #{name}
+        )
     </insert>
 
     <delete id="delete">
-
+        DELETE FROM chat_room
+        WHERE
+        id = #{roomId}
     </delete>
 
     <select id="selectById" resultType="com.cooba.entity.ChatRoomEntity">
-
+        SELECT id, name
+        FROM chat_room
+        WHERE
+        id = #{roomId}
     </select>
 
     <insert id="insertMember">
-
+        INSERT INTO chat_room_member
+        (room_id,user_id)
+        VALUES
+        (
+        #{roomId},
+        #{userId}
+        )
     </insert>
 
     <delete id="deleteMember">
-
+        DELETE FROM chat_room_member
+        WHERE
+        room_id = #{roomId} and
+        user_id = #{userId}
     </delete>
 
     <select id="selectMember" resultType="com.cooba.entity.UserEntity">
-
+        SELECT user.id, user.name
+        FROM chat_room_member as rm
+        JOIN user on user.id = rm.user_id
+        WHERE
+        rm.room_id = #{roomId}
     </select>
 
-    <insert id="insertChat">
+    <resultMap id="chat" type="com.cooba.entity.ChatEntity">
+        <result property="id" column="id"/>
+        <result property="roomId" column="room_id"/>
+        <result property="userId" column="user_id"/>
+        <result property="message" column="message"/>
+        <result property="createdTime" column="created_time"/>
+    </resultMap>
 
+    <insert id="insertChat">
+        INSERT INTO chat
+        (room_id,user_id,message,created_time)
+        VALUES
+        (
+        #{roomId},
+        #{userId},
+        #{message},
+        NOW()
+        )
     </insert>
 
     <delete id="deleteChat">
-
+        DELETE FROM chat
+        WHERE
+        id = #{chatId}
     </delete>
 
-    <select id="selectChat" resultType="com.cooba.entity.ChatEntity">
-
+    <select id="selectChat" resultMap="chat">
+        SELECT id, room_id, user_id, message, created_time
+        FROM chat
+        WHERE
+        room_id = #{roomId}
+        ORDER BY created_time DESC
+        <if test="limit != null">
+            LIMIT #{limit}
+        </if>
     </select>
 </mapper>

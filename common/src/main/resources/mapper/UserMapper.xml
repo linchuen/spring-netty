@@ -10,10 +10,9 @@
 
     <insert id="insert" parameterType="com.cooba.entity.UserEntity">
         INSERT INTO user
-        (id,name)
+        (name)
         VALUES
         (
-            #{id},
             #{name}
         )
     </insert>

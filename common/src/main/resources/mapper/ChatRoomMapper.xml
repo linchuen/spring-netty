@@ -36,9 +36,12 @@
 
     <delete id="deleteMember">
         DELETE FROM chat_room_member
-        WHERE
-        room_id = #{roomId} and
-        user_id = #{userId}
+        <where>
+            room_id = #{roomId}
+            <if test="userId != null">
+                and user_id = #{userId}
+            </if>
+        </where>
     </delete>
 
     <select id="selectMember" resultType="com.cooba.entity.UserEntity">

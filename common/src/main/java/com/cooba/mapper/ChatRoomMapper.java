@@ -18,7 +18,7 @@ public interface ChatRoomMapper {
 
     void insertMember(long roomId, long userId);
 
-    void deleteMember(long roomId, long userId);
+    void deleteMember(long roomId, Long userId);
 
     List<UserEntity> selectMember(long roomId);
 

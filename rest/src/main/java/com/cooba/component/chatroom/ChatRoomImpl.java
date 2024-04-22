@@ -25,6 +25,7 @@ public class ChatRoomImpl implements ChatRoom {
 
     @Override
     public boolean delete(long roomId) {
+        chatRoomRepository.deleteMember(roomId, null);
         return chatRoomRepository.delete(roomId) == 1;
     }
 

@@ -8,7 +8,7 @@
         where id = #{userId}
     </select>
 
-    <insert id="insert" parameterType="com.cooba.entity.UserEntity">
+    <insert id="insert" parameterType="com.cooba.entity.UserEntity" useGeneratedKeys="true" keyProperty="id">
         INSERT INTO user
         (name)
         VALUES

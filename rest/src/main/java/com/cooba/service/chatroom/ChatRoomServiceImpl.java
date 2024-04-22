@@ -1,10 +1,13 @@
 package com.cooba.service.chatroom;
 
 import com.cooba.component.chatroom.ChatRoom;
+import com.cooba.component.messsage_publisher.MessagePublisher;
 import com.cooba.component.user.User;
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
+import com.cooba.enums.MessageType;
+import com.cooba.exception.NotInRoomException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -15,6 +18,7 @@ import java.util.List;
 public class ChatRoomServiceImpl implements ChatRoomService {
     private final User user;
     private final ChatRoom chatRoom;
+    private final MessagePublisher messagePublisher;
 
     @Override
     public Long create(long userId, String name) {
@@ -50,18 +54,40 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
     @Override
     public void addMember(long roomId, long userId) {
-        user.verify(userId);
+        UserEntity userEntity = user.verify(userId);
+        String name = userEntity.getName();
         chatRoom.verify(roomId);
 
         chatRoom.addMember(roomId, userId);
+
+        List<UserEntity> members = chatRoom.getMembers(roomId);
+        for (UserEntity member : members) {
+            Long memberId = member.getId();
+
+            if (userId == memberId) continue;
+            String message = name + " joins room";
+            messagePublisher.sendMessage(String.valueOf(memberId), MessageType.JOIN, message);
+        }
     }
 
     @Override
     public void removeMember(long roomId, long userId) {
-        user.verify(userId);
-        chatRoom.verify(roomId);
+        UserEntity userEntity = user.verify(userId);
+        String name = userEntity.getName();
 
-        chatRoom.removeMember(roomId, userId);
+        Long currentRoomId = user.getCurrentRoomId(userId);
+        if (currentRoomId == null) throw new NotInRoomException(String.valueOf(userId));
+
+        chatRoom.removeMember(currentRoomId, userId);
+
+        List<UserEntity> members = chatRoom.getMembers(currentRoomId);
+        for (UserEntity member : members) {
+            Long memberId = member.getId();
+
+            if (userId == memberId) continue;
+            String message = name + " leaves room";
+            messagePublisher.sendMessage(String.valueOf(memberId), MessageType.LEAVE, message);
+        }
     }
 
     @Override

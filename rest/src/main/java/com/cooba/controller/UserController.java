@@ -2,6 +2,10 @@ package com.cooba.controller;
 
 import com.cooba.component.user.User;
 import com.cooba.request.CreateUserRequest;
+import com.cooba.request.RoomEnterRequest;
+import com.cooba.request.RoomLeaveRequest;
+import com.cooba.request.SpeakRequest;
+import com.cooba.service.user.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +22,7 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 public class UserController {
     private final User user;
+    private final UserService userService;
 
     @PostMapping("/create")
     public ResponseEntity<Long> createUser(@Valid @RequestBody CreateUserRequest request) {
@@ -29,5 +34,23 @@ public class UserController {
     public ResponseEntity<Boolean> deleteUser(@PathVariable String userId) {
         boolean deleted = user.delete(Long.parseLong(userId));
         return ResponseEntity.ok(deleted);
+    }
+
+    @PostMapping("/room/enter")
+    public ResponseEntity<?> enterRoom(@Valid @RequestBody RoomEnterRequest request) {
+        userService.enterRoom(request.getUserId(), request.getRoomId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/room/leave")
+    public ResponseEntity<?> leaveRoom(@Valid @RequestBody RoomLeaveRequest request) {
+        userService.leaveRoom(request.getUserId());
+        return ResponseEntity.ok().build();
+    }
+
+    @PostMapping("/speak")
+    public ResponseEntity<?> speak(@Valid @RequestBody SpeakRequest request) {
+        userService.speak(request.getUserId(), request.getMessage());
+        return ResponseEntity.ok().build();
     }
 }

@@ -4,7 +4,10 @@ import lombok.Getter;
 
 @Getter
 public enum ErrorType {
-    VALUE_NOT_EXIST("%s value is not exist");
+    VALUE_NOT_EXIST("%s value is not exist"),
+    NOT_IN_ROOM("%s is not in room"),
+    PERMISSION_DENIED("permission denied");
+    ;
 
     ErrorType(String message) {
         this.message = message;

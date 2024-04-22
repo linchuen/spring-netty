@@ -43,20 +43,14 @@ public class UserImpl implements User {
 
     @Override
     public void leaveRoom(long userId) {
-        Long currentRoomId = getCurrentRoomId(userId);
-        if (currentRoomId == null) throw new RuntimeException();
-
         redisTemplate.opsForHash().delete(RedisKey.USER_ROOM.name(), userId);
     }
 
     @Override
-    public void speak(long userId, String message) {
-        Long currentRoomId = getCurrentRoomId(userId);
-        if (currentRoomId == null) throw new RuntimeException();
-
+    public void speak(long userId, long roomId, String message) {
         ChatEntity chat = new ChatEntity();
         chat.setUserId(userId);
-        chat.setRoomId(currentRoomId);
+        chat.setRoomId(roomId);
         chat.setMessage(message);
         chatRoomRepository.insertChat(chat);
     }

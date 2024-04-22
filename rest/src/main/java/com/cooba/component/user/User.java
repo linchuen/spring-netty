@@ -13,7 +13,7 @@ public interface User {
 
     void leaveRoom(long userId);
 
-    void speak(long userId, String message);
+    void speak(long userId, long roomId, String message);
 
     Long getCurrentRoomId(long userId);
 }

@@ -3,7 +3,7 @@ package com.cooba.entity;
 import lombok.Data;
 
 @Data
-public class UserData {
+public class UserEntity {
     private Long id;
     private String name;
 }

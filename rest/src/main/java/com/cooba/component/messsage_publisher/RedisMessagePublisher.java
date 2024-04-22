@@ -1,12 +1,11 @@
-package com.cooba.component.impl;
+package com.cooba.component.messsage_publisher;
 
-import com.cooba.component.MessagePublisher;
+import com.cooba.component.messsage_publisher.MessagePublisher;
 import com.cooba.constant.RedisKey;
 import com.cooba.constant.Topic;
 import com.cooba.dto.MessageDto;
 import com.cooba.enums.MessageTypeEnum;
 import com.cooba.util.JsonUtil;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;

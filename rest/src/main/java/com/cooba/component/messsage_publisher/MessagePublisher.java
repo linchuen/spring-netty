@@ -1,4 +1,4 @@
-package com.cooba.component;
+package com.cooba.component.messsage_publisher;
 
 import com.cooba.enums.MessageTypeEnum;
 

@@ -1,6 +1,6 @@
 package com.cooba.mapper;
 
-import com.cooba.entity.UserData;
+import com.cooba.entity.UserEntity;
 import org.apache.ibatis.annotations.Mapper;
 
 import java.util.Optional;
@@ -8,5 +8,5 @@ import java.util.Optional;
 @Mapper
 public interface UserMapper {
 
-    Optional<UserData> findById(long userId);
+    Optional<UserEntity> findById(long userId);
 }

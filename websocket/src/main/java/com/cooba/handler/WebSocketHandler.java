@@ -1,6 +1,6 @@
 package com.cooba.handler;
 
-import com.cooba.component.SocketManager;
+import com.cooba.component.socketmanger.SocketManager;
 import io.netty.channel.ChannelHandler;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.channel.SimpleChannelInboundHandler;
@@ -31,7 +31,7 @@ public class WebSocketHandler extends SimpleChannelInboundHandler<TextWebSocketF
             HttpHeaders headers = handshakeCompletedEvent.requestHeaders();
             String userId = headers.get("userId");
 
-            socketManager.cacheSocket(userId, ctx);
+            socketManager.cacheSocket(userId, ctx.channel());
 
         }
     }

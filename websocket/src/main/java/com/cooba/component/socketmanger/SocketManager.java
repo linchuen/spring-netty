@@ -1,4 +1,4 @@
-package com.cooba.component;
+package com.cooba.component.socketmanger;
 
 import io.netty.channel.Channel;
 

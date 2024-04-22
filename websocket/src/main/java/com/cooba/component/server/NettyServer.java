@@ -1,6 +1,6 @@
-package com.cooba.component.impl;
+package com.cooba.component.server;
 
-import com.cooba.component.Server;
+import com.cooba.component.server.Server;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 

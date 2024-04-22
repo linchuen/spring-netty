@@ -1,6 +1,6 @@
 package com.cooba.task;
 
-import com.cooba.component.SocketManager;
+import com.cooba.component.socketmanger.SocketManager;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

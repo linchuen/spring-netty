@@ -1,9 +1,11 @@
-package com.cooba.component.impl;
+package com.cooba.component.mq;
 
-import com.cooba.component.MessageQueue;
-import com.cooba.component.Server;
-import com.cooba.component.SocketManager;
+import com.cooba.component.mq.MessageQueue;
+import com.cooba.component.server.Server;
+import com.cooba.component.socketmanger.SocketManager;
 import com.cooba.constant.Topic;
+import com.cooba.dto.MessageDto;
+import com.cooba.util.JsonUtil;
 import io.netty.handler.codec.http.websocketx.TextWebSocketFrame;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -14,18 +16,20 @@ import org.springframework.data.redis.listener.RedisMessageListenerContainer;
 import org.springframework.stereotype.Component;
 
 import javax.annotation.PostConstruct;
-import java.util.Locale;
 
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class RedisAllMessageQueue implements MessageQueue, MessageListener {
+public class RedisMessageQueue implements MessageQueue, MessageListener {
+    private final Server server;
     private final SocketManager socketManager;
+    private final JsonUtil jsonUtil;
     private final RedisMessageListenerContainer redisMessageListenerContainer;
 
     @PostConstruct
     public void init() {
-        subscribe(Topic.ALL);
+        String topic = Topic.server(server.getHostAddress(), server.getPort());
+        subscribe(topic);
     }
 
     @Override
@@ -36,8 +40,11 @@ public class RedisAllMessageQueue implements MessageQueue, MessageListener {
 
     @Override
     public void handleMessage(String json) {
-        socketManager.allExecute((id, context) ->
-                context.writeAndFlush(new TextWebSocketFrame(json)));
+        MessageDto message = jsonUtil.fromJson(json, MessageDto.class);
+        String id = message.getId();
+        socketManager.execute(id, context ->
+                context.writeAndFlush(new TextWebSocketFrame(json))
+        );
     }
 
     @Override

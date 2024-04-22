@@ -1,7 +1,7 @@
-package com.cooba.component.impl;
+package com.cooba.component.socketmanger;
 
-import com.cooba.component.Server;
-import com.cooba.component.SocketManager;
+import com.cooba.component.server.Server;
+import com.cooba.component.socketmanger.SocketManager;
 import com.cooba.constant.RedisKey;
 import com.cooba.constant.Topic;
 import io.netty.channel.Channel;

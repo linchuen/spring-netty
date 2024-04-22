@@ -3,7 +3,7 @@ package com.cooba.enums;
 import lombok.Getter;
 
 @Getter
-public enum MessageTypeEnum {
+public enum MessageType {
     MESSAGE,
     ;
 }

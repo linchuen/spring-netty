@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface ChatRoomMapper {
     void insert(ChatRoomEntity chatRoom);
 
-    void delete(long roomId);
+    int delete(long roomId);
 
     Optional<ChatRoomEntity> selectById(long roomId);
 

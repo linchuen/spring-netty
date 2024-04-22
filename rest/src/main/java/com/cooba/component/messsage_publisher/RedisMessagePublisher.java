@@ -3,7 +3,7 @@ package com.cooba.component.messsage_publisher;
 
 import com.cooba.constant.Topic;
 import com.cooba.dto.MqMessage;
-import com.cooba.enums.MessageTypeEnum;
+import com.cooba.enums.MessageType;
 import com.cooba.enums.RedisKey;
 import com.cooba.util.JsonUtil;
 import lombok.RequiredArgsConstructor;
@@ -17,7 +17,7 @@ public class RedisMessagePublisher implements MessagePublisher {
     private final JsonUtil jsonUtil;
 
     @Override
-    public void sendMessage(String id, MessageTypeEnum type, String message) {
+    public void sendMessage(String id, MessageType type, String message) {
         String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION.name(), id);
         if (topic == null) {
             throw new RuntimeException();
@@ -33,7 +33,7 @@ public class RedisMessagePublisher implements MessagePublisher {
     }
 
     @Override
-    public void sendMessageToAll(MessageTypeEnum type, String message) {
+    public void sendMessageToAll(MessageType type, String message) {
         MqMessage mqMessage = new MqMessage();
         mqMessage.setType(type);
         mqMessage.setMessage(message);

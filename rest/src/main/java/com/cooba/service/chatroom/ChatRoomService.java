@@ -1,18 +1,14 @@
-package com.cooba.component.chatroom;
+package com.cooba.service.chatroom;
 
 import com.cooba.entity.ChatEntity;
-import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
 
 import java.util.List;
 
-public interface ChatRoom {
+public interface ChatRoomService {
+    Long create(long userId, String name);
 
-    ChatRoomEntity create(String name);
-
-    boolean delete(long roomId);
-
-    ChatRoomEntity verify(long roomId);
+    boolean delete(long userId, long roomId);
 
     List<ChatEntity> getHistory(long roomId);
 
@@ -23,4 +19,5 @@ public interface ChatRoom {
     void removeMember(long roomId, long userId);
 
     List<UserEntity> getMembers(long roomId);
+
 }

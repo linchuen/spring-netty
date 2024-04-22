@@ -3,6 +3,7 @@ package com.cooba.component.chatroom;
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
+import com.cooba.exception.ValueNotExistException;
 import com.cooba.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -15,14 +16,22 @@ public class ChatRoomImpl implements ChatRoom {
     private final ChatRoomRepository chatRoomRepository;
 
     @Override
-    public void create(String name) {
+    public ChatRoomEntity create(String name) {
         ChatRoomEntity chatRoom = new ChatRoomEntity(name);
         chatRoomRepository.insert(chatRoom);
+
+        return chatRoom;
     }
 
     @Override
-    public void delete(long roomId) {
-        chatRoomRepository.delete(roomId);
+    public boolean delete(long roomId) {
+        return chatRoomRepository.delete(roomId) == 1;
+    }
+
+    @Override
+    public ChatRoomEntity verify(long roomId) {
+        return chatRoomRepository.selectById(roomId)
+                .orElseThrow(() -> new ValueNotExistException("chatRoom"));
     }
 
     @Override

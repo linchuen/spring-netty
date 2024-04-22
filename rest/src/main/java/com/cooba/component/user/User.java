@@ -1,9 +1,13 @@
 package com.cooba.component.user;
 
-public interface User {
-    void create(String name);
+import com.cooba.entity.UserEntity;
 
-    void delete(long userId);
+public interface User {
+    Long create(String name);
+
+    boolean delete(long userId);
+
+    UserEntity verify(long userId);
 
     void joinRoom(long userId, long roomId);
 
@@ -11,5 +15,5 @@ public interface User {
 
     void speak(long userId, String message);
 
-    Long getCurrentRoom(long userId);
+    Long getCurrentRoomId(long userId);
 }

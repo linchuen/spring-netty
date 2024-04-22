@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface UserMapper {
     void insert(UserEntity user);
 
-    void delete(long userId);
+    int delete(long userId);
 
     Optional<UserEntity> findById(long userId);
 }

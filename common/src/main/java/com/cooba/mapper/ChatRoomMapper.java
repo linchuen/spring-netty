@@ -3,10 +3,12 @@ package com.cooba.mapper;
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
+import org.apache.ibatis.annotations.Mapper;
 
 import java.util.List;
 import java.util.Optional;
 
+@Mapper
 public interface ChatRoomMapper {
     void insert(ChatRoomEntity chatRoom);
 

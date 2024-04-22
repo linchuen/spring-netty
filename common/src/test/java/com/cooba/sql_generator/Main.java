@@ -7,6 +7,6 @@ import com.cooba.entity.UserEntity;
 
 public class Main {
     public static void main(String[] args) {
-        TableSqlGenerator.generateSql(ChatEntity.class);
+        TableSqlGenerator.generateSql(ChatRoomEntity.class);
     }
 }

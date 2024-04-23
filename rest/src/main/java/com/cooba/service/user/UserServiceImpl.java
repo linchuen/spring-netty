@@ -10,6 +10,7 @@ import com.cooba.exception.NotInRoomException;
 import com.cooba.exception.PermissionException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -40,6 +41,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void speak(long userId, String message) {
         user.verify(userId);
 

@@ -11,6 +11,7 @@ import com.cooba.enums.MessageType;
 import com.cooba.exception.WrongOperationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
@@ -22,6 +23,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     private final MessagePublisher messagePublisher;
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public Long create(long userId, String name) {
         user.verify(userId);
 
@@ -32,6 +34,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public boolean delete(long userId, long roomId) {
         user.verify(userId);
         chatRoom.verify(roomId);
@@ -54,6 +57,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void addMember(long roomId, long userId) {
         UserEntity userEntity = user.verify(userId);
         String name = userEntity.getName();
@@ -83,6 +87,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     }
 
     @Override
+    @Transactional(rollbackFor = Exception.class)
     public void removeMember(long roomId, long userId) {
         UserEntity userEntity = user.verify(userId);
         String name = userEntity.getName();

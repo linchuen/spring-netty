@@ -7,7 +7,8 @@ public enum ErrorType {
     VALUE_NOT_EXIST("%s value is not exist"),
     NOT_IN_ROOM("%s is not in room"),
     PERMISSION_DENIED("permission denied"),
-    WRONG_OPERATION("wrong operation reason:%s")
+    WRONG_OPERATION("wrong operation reason:%s"),
+    WEBSOCKET_CONNECTION("websocket connection")
     ;
 
     ErrorType(String message) {

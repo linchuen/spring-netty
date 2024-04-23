@@ -23,7 +23,7 @@ public class FixTimeTask {
         socketManager.allExecute((id, channel) -> {
             Optional<UserEntity> user = userRepository.findById(Long.parseLong(id));
             if (user.isEmpty()) return;
-            String message = "Hello" + user.get().getName();
+            String message = "Hello " + user.get().getName();
             channel.writeAndFlush(new TextWebSocketFrame(message));
         });
     }

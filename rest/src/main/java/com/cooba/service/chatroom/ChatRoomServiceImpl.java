@@ -73,7 +73,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
             if (userId == memberId) continue;
             MqMessage mqMessage = MqMessage.builder()
-                    .userId(String.valueOf(userId))
+                    .userId(String.valueOf(memberId))
                     .roomId(roomId)
                     .type(MessageType.JOIN)
                     .message(systemMessage)
@@ -102,7 +102,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
 
             if (userId == memberId) continue;
             MqMessage mqMessage = MqMessage.builder()
-                    .userId(String.valueOf(userId))
+                    .userId(String.valueOf(memberId))
                     .roomId(roomId)
                     .type(MessageType.LEAVE)
                     .message(systemMessage)

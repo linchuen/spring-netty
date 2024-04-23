@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
 
             if (userId == memberId) continue;
             MqMessage mqMessage = MqMessage.builder()
-                    .userId(String.valueOf(userId))
+                    .userId(String.valueOf(memberId))
                     .roomId(currentRoomId)
                     .type(MessageType.MESSAGE)
                     .message(message)

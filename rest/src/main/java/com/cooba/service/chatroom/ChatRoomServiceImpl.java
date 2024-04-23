@@ -8,7 +8,7 @@ import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
 import com.cooba.enums.MessageType;
-import com.cooba.exception.NotInRoomException;
+import com.cooba.exception.WrongOperationException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -59,9 +59,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         String name = userEntity.getName();
         chatRoom.verify(roomId);
 
+        List<UserEntity> members = chatRoom.getMembers(roomId);
+        boolean isMember = members.stream().anyMatch(member -> member.getId().equals(userId));
+        if (isMember) throw new WrongOperationException("is already member");
+
         chatRoom.addMember(roomId, userId);
 
-        List<UserEntity> members = chatRoom.getMembers(roomId);
         for (UserEntity member : members) {
             Long memberId = member.getId();
 
@@ -81,12 +84,12 @@ public class ChatRoomServiceImpl implements ChatRoomService {
         UserEntity userEntity = user.verify(userId);
         String name = userEntity.getName();
 
-        Long currentRoomId = user.getCurrentRoomId(userId);
-        if (currentRoomId == null) throw new NotInRoomException(String.valueOf(userId));
+        List<UserEntity> members = chatRoom.getMembers(roomId);
+        boolean isMember = members.stream().anyMatch(member -> member.getId().equals(userId));
+        if (!isMember) throw new WrongOperationException("is not member");
 
-        chatRoom.removeMember(currentRoomId, userId);
+        chatRoom.removeMember(roomId, userId);
 
-        List<UserEntity> members = chatRoom.getMembers(currentRoomId);
         for (UserEntity member : members) {
             Long memberId = member.getId();
 

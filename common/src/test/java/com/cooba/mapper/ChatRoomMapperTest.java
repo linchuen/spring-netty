@@ -10,6 +10,7 @@ import org.springframework.test.context.ContextConfiguration;
 class ChatRoomMapperTest extends MapperTest{
     @Autowired
     ChatRoomMapper chatRoomMapper;
+
     @Test
     void insert() {
         chatRoomMapper.insert(Instancio.create(ChatRoomEntity.class));

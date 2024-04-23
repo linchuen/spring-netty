@@ -50,7 +50,7 @@ class ChatRoomServiceImplTest {
 
         chatRoomService.addMember(1L, 1L);
 
-        Mockito.verify(chatRoom).addMember(1L,1L);
+        Mockito.verify(chatRoom).addMember(1L, 1L);
     }
 
     @Test
@@ -75,6 +75,6 @@ class ChatRoomServiceImplTest {
 
         chatRoomService.removeMember(1L, 1L);
 
-        Mockito.verify(chatRoom).removeMember(1L,1L);
+        Mockito.verify(chatRoom).removeMember(1L, 1L);
     }
 }

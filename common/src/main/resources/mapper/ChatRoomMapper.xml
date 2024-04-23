@@ -56,17 +56,19 @@
         <result property="id" column="id"/>
         <result property="roomId" column="room_id"/>
         <result property="userId" column="user_id"/>
+        <result property="type" column="type"/>
         <result property="message" column="message"/>
         <result property="createdTime" column="created_time"/>
     </resultMap>
 
     <insert id="insertChat">
         INSERT INTO chat
-        (room_id,user_id,message,created_time)
+        (room_id,user_id,type,message,created_time)
         VALUES
         (
         #{roomId},
         #{userId},
+        #{type},
         #{message},
         NOW()
         )
@@ -79,7 +81,7 @@
     </delete>
 
     <select id="selectChat" resultMap="chat">
-        SELECT id, room_id, user_id, message, created_time
+        SELECT id, room_id, user_id, type, message, created_time
         FROM chat
         WHERE
         room_id = #{roomId}

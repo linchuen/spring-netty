@@ -3,6 +3,7 @@ package com.cooba.component.chatroom;
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
+import com.cooba.enums.MessageType;
 import com.cooba.exception.ValueNotExistException;
 import com.cooba.repository.ChatRoomRepository;
 import lombok.RequiredArgsConstructor;
@@ -53,6 +54,16 @@ public class ChatRoomImpl implements ChatRoom {
     @Override
     public void removeMember(long roomId, long userId) {
         chatRoomRepository.deleteMember(roomId, userId);
+    }
+
+    @Override
+    public void addSystemMessage(long roomId, long userId, MessageType type, String message) {
+        ChatEntity chat = new ChatEntity();
+        chat.setUserId(userId);
+        chat.setRoomId(roomId);
+        chat.setType(type.name());
+        chat.setMessage(message);
+        chatRoomRepository.insertChat(chat);
     }
 
     @Override

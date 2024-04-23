@@ -57,13 +57,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void addMember(long roomId, long userId) {
         UserEntity userEntity = user.verify(userId);
         String name = userEntity.getName();
-        chatRoom.verify(roomId);
+        ChatRoomEntity chatRoomEntity = chatRoom.verify(roomId);
+        String roomName = chatRoomEntity.getName();
 
         List<UserEntity> members = chatRoom.getMembers(roomId);
         boolean isMember = members.stream().anyMatch(member -> member.getId().equals(userId));
         if (isMember) throw new WrongOperationException("is already member");
 
+        String systemMessage = name + "加入" + roomName + "房間";
         chatRoom.addMember(roomId, userId);
+        chatRoom.addSystemMessage(roomId, userId, MessageType.JOIN, systemMessage);
 
         for (UserEntity member : members) {
             Long memberId = member.getId();
@@ -73,7 +76,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     .userId(String.valueOf(userId))
                     .roomId(roomId)
                     .type(MessageType.JOIN)
-                    .message(name + " joins room")
+                    .message(systemMessage)
                     .build();
             messagePublisher.sendMessage(mqMessage);
         }
@@ -83,12 +86,16 @@ public class ChatRoomServiceImpl implements ChatRoomService {
     public void removeMember(long roomId, long userId) {
         UserEntity userEntity = user.verify(userId);
         String name = userEntity.getName();
+        ChatRoomEntity chatRoomEntity = chatRoom.verify(roomId);
+        String roomName = chatRoomEntity.getName();
 
         List<UserEntity> members = chatRoom.getMembers(roomId);
         boolean isMember = members.stream().anyMatch(member -> member.getId().equals(userId));
         if (!isMember) throw new WrongOperationException("is not member");
 
+        String systemMessage = name + "離開" + roomName + "房間";
         chatRoom.removeMember(roomId, userId);
+        chatRoom.addSystemMessage(roomId, userId, MessageType.LEAVE, systemMessage);
 
         for (UserEntity member : members) {
             Long memberId = member.getId();
@@ -98,7 +105,7 @@ public class ChatRoomServiceImpl implements ChatRoomService {
                     .userId(String.valueOf(userId))
                     .roomId(roomId)
                     .type(MessageType.LEAVE)
-                    .message(name + " leaves room")
+                    .message(systemMessage)
                     .build();
             messagePublisher.sendMessage(mqMessage);
         }

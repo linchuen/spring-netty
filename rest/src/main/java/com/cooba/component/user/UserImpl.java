@@ -2,6 +2,7 @@ package com.cooba.component.user;
 
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.UserEntity;
+import com.cooba.enums.MessageType;
 import com.cooba.enums.RedisKey;
 import com.cooba.exception.ValueNotExistException;
 import com.cooba.repository.ChatRoomRepository;
@@ -51,6 +52,7 @@ public class UserImpl implements User {
         ChatEntity chat = new ChatEntity();
         chat.setUserId(userId);
         chat.setRoomId(roomId);
+        chat.setType(MessageType.MESSAGE.name());
         chat.setMessage(message);
         chatRoomRepository.insertChat(chat);
     }

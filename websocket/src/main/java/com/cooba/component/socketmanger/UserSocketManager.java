@@ -44,6 +44,7 @@ public class UserSocketManager implements SocketManager {
     @Override
     public void removeSocket(String id) {
         idChannelMap.remove(id);
+        redisTemplate.opsForHash().delete(RedisKey.CONNECTION.name(), id);
     }
 
     @Override

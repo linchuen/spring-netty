@@ -39,12 +39,12 @@ public class UserImpl implements User {
 
     @Override
     public void joinRoom(long userId, long roomId) {
-        redisTemplate.opsForHash().put(RedisKey.USER_ROOM.name(), userId, roomId);
+        redisTemplate.opsForHash().put(RedisKey.USER_ROOM.name(), String.valueOf(userId), String.valueOf(roomId));
     }
 
     @Override
     public void leaveRoom(long userId) {
-        redisTemplate.opsForHash().delete(RedisKey.USER_ROOM.name(), userId);
+        redisTemplate.opsForHash().delete(RedisKey.USER_ROOM.name(), String.valueOf(userId));
     }
 
     @Override

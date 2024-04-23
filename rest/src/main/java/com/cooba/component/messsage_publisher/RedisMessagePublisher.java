@@ -26,7 +26,7 @@ public class RedisMessagePublisher implements MessagePublisher {
     @Override
     @Async("MessageExecutor")
     public void sendMessage(MqMessage mqMessage) {
-        if(!checkInRoomMode(mqMessage)) return;
+        if (!checkInRoomMode(mqMessage)) return;
 
         String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION.name(), mqMessage.getUserId());
         if (topic == null) {
@@ -37,11 +37,11 @@ public class RedisMessagePublisher implements MessagePublisher {
         redisTemplate.convertAndSend(topic, json);
     }
 
-    private boolean checkInRoomMode(MqMessage mqMessage){
-        if(!sendMode.equalsIgnoreCase(SendMode.IN_ROOM.getMode())) return true;
+    private boolean checkInRoomMode(MqMessage mqMessage) {
+        if (!sendMode.equalsIgnoreCase(SendMode.IN_ROOM.getMode())) return true;
 
-        Long roomId =(Long) redisTemplate.opsForHash().get(RedisKey.USER_ROOM.name(), mqMessage.getUserId());
-        return mqMessage.getRoomId().equals(roomId);
+        String roomId = (String) redisTemplate.opsForHash().get(RedisKey.USER_ROOM.name(), mqMessage.getUserId());
+        return roomId != null && mqMessage.getRoomId().equals(Long.parseLong(roomId));
     }
 
     @Override

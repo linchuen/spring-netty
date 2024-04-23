@@ -6,7 +6,8 @@ import lombok.Getter;
 public enum ErrorType {
     VALUE_NOT_EXIST("%s value is not exist"),
     NOT_IN_ROOM("%s is not in room"),
-    PERMISSION_DENIED("permission denied");
+    PERMISSION_DENIED("permission denied"),
+    WRONG_OPERATION("wrong operation reason:%s")
     ;
 
     ErrorType(String message) {

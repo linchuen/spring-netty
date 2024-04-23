@@ -13,11 +13,11 @@ public abstract class BaseException extends RuntimeException {
         return this.errorType.name();
     }
 
-    protected String getErrorMessage(Object... objects) {
+    public String getErrorMessage(Object... objects) {
         return this.errorType.getMessage(objects);
     }
 
-    protected String getErrorMessage() {
+    public String getErrorMessage() {
         return this.errorType.getMessage();
     }
 

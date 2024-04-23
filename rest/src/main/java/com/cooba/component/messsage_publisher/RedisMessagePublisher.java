@@ -17,26 +17,23 @@ public class RedisMessagePublisher implements MessagePublisher {
     private final JsonUtil jsonUtil;
 
     @Override
-    public void sendMessage(String id, MessageType type, String message) {
-        String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION.name(), id);
+    public void sendMessage(MqMessage mqMessage) {
+        String topic = (String) redisTemplate.opsForHash().get(RedisKey.CONNECTION.name(), mqMessage.getUserId());
         if (topic == null) {
             throw new RuntimeException();
         }
-
-        MqMessage mqMessage = new MqMessage();
-        mqMessage.setId(id);
-        mqMessage.setType(type);
-        mqMessage.setMessage(message);
 
         String json = jsonUtil.toJson(mqMessage);
         redisTemplate.convertAndSend(topic, json);
     }
 
     @Override
-    public void sendMessageToAll(MessageType type, String message) {
-        MqMessage mqMessage = new MqMessage();
-        mqMessage.setType(type);
-        mqMessage.setMessage(message);
+    public void sendMessageToAll(Long roomId, MessageType type, String message) {
+        MqMessage mqMessage = MqMessage.builder()
+                .roomId(roomId)
+                .type(type)
+                .message(message)
+                .build();
 
         String json = jsonUtil.toJson(mqMessage);
         redisTemplate.convertAndSend(Topic.ALL, json);

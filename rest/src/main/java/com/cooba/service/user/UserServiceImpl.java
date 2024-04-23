@@ -3,6 +3,7 @@ package com.cooba.service.user;
 import com.cooba.component.chatroom.ChatRoom;
 import com.cooba.component.messsage_publisher.MessagePublisher;
 import com.cooba.component.user.User;
+import com.cooba.dto.MqMessage;
 import com.cooba.entity.UserEntity;
 import com.cooba.enums.MessageType;
 import com.cooba.exception.NotInRoomException;
@@ -51,7 +52,14 @@ public class UserServiceImpl implements UserService {
         for (UserEntity member : members) {
             Long memberId = member.getId();
 
-            messagePublisher.sendMessage(String.valueOf(memberId), MessageType.MESSAGE, message);
+            if (userId == memberId) continue;
+            MqMessage mqMessage = MqMessage.builder()
+                    .userId(String.valueOf(userId))
+                    .roomId(currentRoomId)
+                    .type(MessageType.MESSAGE)
+                    .message(message)
+                    .build();
+            messagePublisher.sendMessage(mqMessage);
         }
     }
 }

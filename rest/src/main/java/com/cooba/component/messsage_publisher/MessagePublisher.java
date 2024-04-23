@@ -1,9 +1,10 @@
 package com.cooba.component.messsage_publisher;
 
+import com.cooba.dto.MqMessage;
 import com.cooba.enums.MessageType;
 
 public interface MessagePublisher {
-    void sendMessage(String id, MessageType type, String message);
+    void sendMessage(MqMessage mqMessage);
 
-    void sendMessageToAll(MessageType type, String message);
+    void sendMessageToAll(Long roomId, MessageType type, String message);
 }

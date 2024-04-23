@@ -3,6 +3,7 @@ package com.cooba.service.chatroom;
 import com.cooba.component.chatroom.ChatRoom;
 import com.cooba.component.messsage_publisher.MessagePublisher;
 import com.cooba.component.user.User;
+import com.cooba.dto.MqMessage;
 import com.cooba.entity.ChatEntity;
 import com.cooba.entity.ChatRoomEntity;
 import com.cooba.entity.UserEntity;
@@ -65,8 +66,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             Long memberId = member.getId();
 
             if (userId == memberId) continue;
-            String message = name + " joins room";
-            messagePublisher.sendMessage(String.valueOf(memberId), MessageType.JOIN, message);
+            MqMessage mqMessage = MqMessage.builder()
+                    .userId(String.valueOf(userId))
+                    .roomId(roomId)
+                    .type(MessageType.JOIN)
+                    .message(name + " joins room")
+                    .build();
+            messagePublisher.sendMessage(mqMessage);
         }
     }
 
@@ -85,8 +91,13 @@ public class ChatRoomServiceImpl implements ChatRoomService {
             Long memberId = member.getId();
 
             if (userId == memberId) continue;
-            String message = name + " leaves room";
-            messagePublisher.sendMessage(String.valueOf(memberId), MessageType.LEAVE, message);
+            MqMessage mqMessage = MqMessage.builder()
+                    .userId(String.valueOf(userId))
+                    .roomId(roomId)
+                    .type(MessageType.LEAVE)
+                    .message(name + " leaves room")
+                    .build();
+            messagePublisher.sendMessage(mqMessage);
         }
     }
 

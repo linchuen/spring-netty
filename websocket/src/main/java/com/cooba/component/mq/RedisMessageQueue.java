@@ -40,7 +40,7 @@ public class RedisMessageQueue implements MessageQueue, MessageListener {
     @Override
     public void handleMessage(String json) {
         MqMessage message = jsonUtil.fromJson(json, MqMessage.class);
-        String id = message.getId();
+        String id = message.getUserId();
         socketManager.execute(id, context ->
                 context.writeAndFlush(new TextWebSocketFrame(json))
         );

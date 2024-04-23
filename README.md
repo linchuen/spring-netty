@@ -18,5 +18,6 @@
 
 ### 基本邏輯示意圖
 
-![左側為會接收所有聊天室訊息
-右側為只接收所在聊天室訊息](https://github.com/linchuen/spring-netty/blob/master/Logic.jpg)
+![image](https://github.com/linchuen/spring-netty/blob/master/Logic.jpg)
+* 左側為會接收所有聊天室訊息
+* 右側為只接收所在聊天室訊息

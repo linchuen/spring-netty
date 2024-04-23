@@ -53,13 +53,13 @@ public class ChatRoomController {
     @PostMapping("/member/add")
     public ResponseEntity<?> addMember(@Valid @RequestBody AddMemberRequest request) {
         chatRoomService.addMember(request.getRoomId(), request.getUserId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @DeleteMapping("/member/delete")
     public ResponseEntity<?> removeMember(@Valid @RequestBody DeleteMemberRequest request) {
        chatRoomService.removeMember(request.getRoomId(), request.getUserId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @GetMapping("/member/{roomId}")

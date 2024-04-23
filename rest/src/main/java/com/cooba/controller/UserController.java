@@ -39,18 +39,18 @@ public class UserController {
     @PostMapping("/room/enter")
     public ResponseEntity<?> enterRoom(@Valid @RequestBody RoomEnterRequest request) {
         userService.enterRoom(request.getUserId(), request.getRoomId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/room/leave")
     public ResponseEntity<?> leaveRoom(@Valid @RequestBody RoomLeaveRequest request) {
         userService.leaveRoom(request.getUserId());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/speak")
     public ResponseEntity<?> speak(@Valid @RequestBody SpeakRequest request) {
         userService.speak(request.getUserId(), request.getMessage());
-        return ResponseEntity.ok().build();
+        return ResponseEntity.ok(true);
     }
 }
